@@ -5,7 +5,7 @@ Here I try to solve all programming puzzles from the 2017 advent of code. The bi
 ## Ideas for languages:
 
 ### Imperative
-- FO:RTRAN
+- FORTRAN
 - BASIC
 - Pascal
 - WebAssembly (?)
@@ -31,6 +31,10 @@ Here I try to solve all programming puzzles from the 2017 advent of code. The bi
 ### Array based
 - Excel		(no VBA)
 - APL
+
+### Meme
+- Piet
+- Brainfuck
 
 ### Multi paradigm
 - Nim
