@@ -2,15 +2,14 @@
 
 Here I try to solve all programming puzzles from the 2017 advent of code. The big catch is that I will use a different language each day. I should also try to seek out new languages and not use too many I already use a lot.
 
+
 ## Ideas for languages:
 
 ### Imperative
 - FORTRAN
-- BASIC
-- Pascal
-- WebAssembly (?)
+- Pascal (Free Pascal)
 - Bash
-- Assembly (x86?)
+- x86 Assembly
 
 ### Object Oriented
 - Simula
@@ -30,11 +29,10 @@ Here I try to solve all programming puzzles from the 2017 advent of code. The bi
 
 ### Array based
 - Excel		(no VBA)
-- APL
+- APL (!)
 
 ### Meme
 - Piet
-- Brainfuck
 
 ### Multi paradigm
 - Nim
@@ -45,3 +43,18 @@ Here I try to solve all programming puzzles from the 2017 advent of code. The bi
 - Raku 		(Perl)
 - R		(Statistical)
 - JavaScript	(Maybe too alike?)
+
+
+## Problem to language map
+
+A thing to note is that day 1 is a friday and that weekends tend to be the hardest.
+
+1. Circular lists - Piet
+2. Row checksums - Excel
+3. Spiral distances - Simula / Pascal
+4. Valid passphrases - Bash
+5. Jump offsets - x86
+6. Memory reallocation - Simula / Pascal
+7. Balancing towers - Prolog
+8. Register operations - ?
+9. Stream parsing - Erlang
