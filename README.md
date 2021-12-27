@@ -43,6 +43,7 @@ Here I try to solve all programming puzzles from the 2017 advent of code. The bi
 - Raku 		(Perl)
 - R		(Statistical)
 - JavaScript	(Maybe too alike?)
+- Pen and paper
 
 
 ## Problem to language map
