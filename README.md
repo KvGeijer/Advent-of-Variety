@@ -28,8 +28,8 @@ Here I try to solve all programming puzzles from the 2017 advent of code. The bi
 - PureScript
 
 ### Array based
-- Excel		(no VBA)
-- APL (!)
+- Excel
+- APL
 
 ### Meme
 - Piet
