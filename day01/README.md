@@ -17,13 +17,3 @@ It could even read in numbers directly, but as we wanted to read each digit by i
 It was surprisingly fun. The movement with the DP and CC was a bit more complex than I initially thought and it made everything much more interesting. To code golf in the language feels like it could be incredibly fun and challenging. This in large part due to it being quite simple to program if you just put things on straight lines.
 
 So overall a surprisingly fun stack based language with a very pretty but confuing way to write code. Would definetely recommend
-Here you just pipe in the input file as usual. Very nice compatability.
-
-It could even read in numbers directly, but as we wanted to read each digit by itself I had to do a loop and subtract by 48.
-
-## Impression of Piet
-
-It was surprisingly fun. The movement with the DP and CC was a bit more complex than I initially thought and it made everything much more interesting. To code golf in the language feels like it could be incredibly fun and challenging. This in large part due to it being quite simple to program if you just put things on straight lines.
-
-So overall a surprisingly fun stack based language with a very pretty but confuing way to write code. Would definetely recommend.
-
