@@ -1,1 +1,7 @@
 *.o
+*.9d
+/*/local/*
+
+
+/day01/npiet_windows
+
