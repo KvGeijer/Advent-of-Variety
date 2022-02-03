@@ -16,7 +16,7 @@ main:
         pushq $0                # Create local variable for length of array
         pushq $0                # Create local var for number of steps taken
 
-read_num:       # Reads a num and pushes it onto the stack, continues until EOF reached where it continues
+read_num:       # Reads a num and pushes it onto the stack twice, continues until EOF reached where it goes to part1
         movq $1, %r9            # r9: sign <- 1
         movq $0, %r10           # r10: sum <- 0
         movq $0, %rdi
@@ -25,11 +25,11 @@ read_num:       # Reads a num and pushes it onto the stack, continues until EOF 
         movq $0, %rax
         syscall                 # get one char: sys_read(0, buf, 1)
         cmpq $0, %rax
-        jle do_jumps            # num_read <= 0 (EOF reached) ERROR?
+        jle part1               # num_read <= 0 (EOF reached)
         movb (%rsi), %cl        # cl <- current char
         cmp $45, %cl
         jne accumulate_sum_read # Not negative
-        movq $-1, %r9           # TODO: Try instead have if statement for negative
+        movq $-1, %r9
         
 accumulate_sum: # Read the chars and add to sum until we hit a newline
         movq $0, %rdi
@@ -53,34 +53,60 @@ accumulate_sum_read: # After the char is read
 num_read:       # Reached end of line
         imulq %r9, %r10         # sum *= sign
         pushq %r10              # Push the number on the stack
-        addq $1, -8(%rbp)       # Add one to the local variable. ERROR?
+        pushq %r10              # Again, for part 2
+        addq $1, -8(%rbp)       # Add one to the local variable.
         jmp read_num    
 
-do_jumps:       # Now the stack is set up, simply execute the jumps until we escape and then return the answer
+part1:       # Now the stack is set up, simply execute the jumps until we escape and then return the answer
         movq $0, %rax           # rax: current pos = 0
                                 # rbx: the current address in the array
-do_jump:
+do_jump1:
         cmpq -8(%rbp), %rax
-        jge jumps_done          # Done if pos >= length
+        jge part1_done          # Done if pos >= length
 
-        movq %rbp, %rbx
-        subq $24, %rbx
-        movq %rax, %rcx
-        imulq $8, %rcx
-        subq %rcx, %rbx          # rbx = rbp - 24 - 8*pos
+        movq %rax, %rbx
+        imulq $-16, %rbx
+        addq %rbp, %rbx
+        subq $32, %rbx          # rbx = rbp - 24 - 16*pos - 8 (8 to save other for part 2)
 
         addq (%rbx), %rax
         addq $1, (%rbx)         # Increase value in array by 1
         addq $1, -16(%rbp)      # Increase number of taken steps by 1
-        jmp do_jump
+        jmp do_jump1
 
-jumps_done:
+part1_done:
         pushq -16(%rbp)
         call print
-        popq %rdx
+        popq %rdx               # Print result of part1
+
+part2:                     
+        movq $0, %rax           # rax: current pos = 0
+        movq $0, -16(%rbp)      # Reset number of steps taken
+do_jump2:
+        cmpq -8(%rbp), %rax
+        jge part2_done          # Done if pos >= length
+
+        movq %rax, %rbx
+        imulq $-16, %rbx
+        addq %rbp, %rbx
+        subq $24, %rbx          # rbx = rbp - 24 - 16*pos - 8 (8 to save other for part 2)
+
+
+        addq (%rbx), %rax
+        addq $1, -16(%rbp)      # Increase number of taken steps by 1
+        addq $1, (%rbx)         # Increase value in array by 1
+        cmpq $3, (%rbx) 
+        jle do_jump2
+        subq $2, (%rbx)         # If previously >= 3, add 1 and then sub 2 == sub 1
+        jmp do_jump2
+
+part2_done:
+        pushq -16(%rbp)
+        call print
+        popq %rdx               # Print result of part2
 
         movq -8(%rbp), %rbx
-        imulq $8, %rbx
+        imulq $16, %rbx
         addq %rbx, %rsp         # Deallocate the array
         addq $16, %rsp          # Deallocate the local variables
         popq %rbp
