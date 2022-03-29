@@ -13,7 +13,7 @@ Here I try to solve all programming puzzles from the 2017 advent of code. The bi
 
 ### Object Oriented
 - ~~Simula~~
-- SmallTalk
+- ~~SmallTalk~~
 - C++
 - Ruby
 - Kotlin
@@ -27,6 +27,7 @@ Here I try to solve all programming puzzles from the 2017 advent of code. The bi
 - Erlang
 - Elixir
 - PureScript
+- Scala
 
 ### Array based
 - Excel
