@@ -46,6 +46,7 @@ Here I try to solve all programming puzzles from the 2017 advent of code. The bi
 - R		(Statistical)
 - JavaScript	(Maybe too alike?)
 - Pen and paper
+- Kotlin
 
 
 ## Problem to language map
@@ -57,7 +58,7 @@ A thing to note is that day 1 is a friday and that weekends tend to be the harde
 3. Spiral distances - Pascal
 4. Valid passphrases - Bash
 5. Jump offsets - x86
-6. Memory reallocation - ~~Simula~~ SmallTalk
+6. Memory reallocation - ~~Simula~~ ~~SmallTalk~~ Kotlin
 7. Balancing towers - Prolog
 8. Register operations - ?
 9. Stream parsing - Erlang
