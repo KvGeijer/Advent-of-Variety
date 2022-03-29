@@ -16,4 +16,9 @@ carries(ugml, ebii).
 carries(ugml, jptl).
 
 % This writes out all the carriers until it can't match no more. It really is not that nice...
-bottomCarrier(X) :- writeln(X), carries(Y, X), bottomCarrier(Y).
+bottomCarrier(X) :- (carries(Y, X)
+    -> bottomCarrier(Y)
+    ; format('The bottom is: ~w~n', [X])
+).
+
+result :- bottomCarrier(jptl).

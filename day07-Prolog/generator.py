@@ -20,7 +20,10 @@ def main():
         for (carried, carrier) in carried_map.items():
             f.write(f"carries({carrier}, {carried}).\n")
 
-        f.write("\nbottomCarrier(X) :- writeln(X), carries(Y, X), bottomCarrier(Y).\n")
+        f.write("""\nbottomCarrier(X) :- (carries(Y, X)
+    -> bottomCarrier(Y)
+    ; format('The bottom is: ~w~n', [X])
+).""")
         f.write(f"\nresult :- bottomCarrier({carried}).\n")
 
 
