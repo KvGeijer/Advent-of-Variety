@@ -33,20 +33,20 @@ fun redistribute( blocks: ArrayList<Int>) {
 }
 
 
-fun part1( blocks: ArrayList<Int>): Unit {
-    val observed = HashSet<ArrayList<Int>>()
+fun simulate( blocks: ArrayList<Int>): Pair<Int, Int> {
+    val observed = HashMap<ArrayList<Int>, Int>()
     var size = 0
 
     do {
 
-
-        observed.add(ArrayList<Int>(blocks))
+        
+        observed.set(ArrayList<Int>(blocks), size)
         redistribute(blocks)
         size++
 
     } while (!observed.contains(blocks))
 
-    println("Iterations before duplicate: " + size)
+    return Pair(size, size - (observed.get(blocks) ?: 0))
 
 }
 
@@ -54,6 +54,10 @@ fun part1( blocks: ArrayList<Int>): Unit {
 fun main() {
     val blocks = parse()
 
-    part1(blocks)
+    val (size, loop_size) = simulate(blocks)
+
+    println("Iterations before duplicate: " + size)
+    println("Size of each loop: " + loop_size)
+
 }
 
