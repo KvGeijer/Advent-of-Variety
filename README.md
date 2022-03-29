@@ -46,7 +46,6 @@ Here I try to solve all programming puzzles from the 2017 advent of code. The bi
 - R		(Statistical)
 - JavaScript	(Maybe too alike?)
 - Pen and paper
-- Kotlin
 
 
 ## Problem to language map
