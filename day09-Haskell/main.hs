@@ -1,51 +1,52 @@
-import Data.Maybe
-
+import Control.Arrow
 import Text.Parsec
-import Text.Parsec.Char
-import Text.Parsec.Expr
 
-data Group = Group [Group] deriving (Show)
-data Void
 
+data Streamed = Group [Streamed] | Garbage Int
+    deriving (Show)
+
+-- Could be made more clear as the &&&, splitting the input is not standard
 main :: IO ()
 main = do
-    interact $ either show (show.getScore 1) . parse parseGroup ""
+    interact $ either show (show. ((getGroupScore 1) &&& getTrashScore)) . parse parseGroup ""
     putStr "\n"
 
--- The score of each group is how deep it is
-getScore ::  Int -> Group -> Int
-getScore depth (Group subs) = foldr (+) depth $ map (getScore (depth + 1)) subs
+getTrashScore :: Streamed -> Int
+getTrashScore (Group pieces) = sum . map getTrashScore $ pieces
+getTrashScore (Garbage pieces) = pieces
+
+getGroupScore ::  Int -> Streamed -> Int
+getGroupScore _ (Garbage _) = 0
+getGroupScore depth (Group subs) = (+depth) . sum . map (getGroupScore (depth + 1)) $ subs
 
 
-parseGroup :: Parsec String () Group
+parseGroup :: Parsec String () Streamed
 parseGroup = do
     char '{'
-    group <- (fmap Group parseThings)
+    streamed <- parseThings
     char '}'
 
-    return group
+    return $ Group streamed
 
-parseThings :: Parsec String () [Group]
-parseThings = do
-    list_items <- (sepBy parseThing (char ','))
-    return $ catMaybes list_items
+parseThings :: Parsec String () [Streamed]
+parseThings = sepBy parseThing (char ',')
 
-parseThing :: Parsec String () (Maybe Group)
-parseThing = do
-    try (fmap (\x -> Just x) parseGroup)
-    <|> (fmap (\x -> Nothing) parseGarbage)
+parseThing :: Parsec String () Streamed
+parseThing = try parseGroup <|> parseGarbage
 
 
-parseGarbage :: Parsec String () (Maybe Group)
+parseGarbage :: Parsec String () Streamed
 parseGarbage = do
     char '<'
-    many parseOneGarbage
+    pieces <- many parseOneGarbage
     char '>'
-    return Nothing
+    return $ Garbage $ sum pieces
 
+-- Sort of ugly that this only returns 1 or 0. More clean with "Maybe Char" probably
+parseOneGarbage :: Parsec String () Int
 parseOneGarbage = do
-    try (noneOf "!>")
-    <|> parseNegation
+    (try (noneOf "!>") >> return 1)
+    <|> (parseNegation >> return 0)
 
 parseNegation = do
     char '!'
