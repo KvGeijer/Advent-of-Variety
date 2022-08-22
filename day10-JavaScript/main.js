@@ -5,22 +5,13 @@ function main() {
     let readline = require('readline');
     let parser = readline.createInterface({
         input: process.stdin,
-        output: process.stdout,
         terminal: false
     });
 
-    // This way we can read multiple lines if we want
-    // However, there must be a cleaner way to do this... Want to return and wait for futures
-    let input;
+    // This way we can read multiple lines if we want. Don't stop until EOF automatically
     parser.on('line', function(line){
-        input = line;
-        parser.close();
-    })
-
-    parser.on('close', function() {
-
-        part1(input.split(',').map(Number));
-        part2(getCharCodes(input));
+        part1(line.split(',').map(Number));
+        part2(getCharCodes(line));
     })
 }
 
