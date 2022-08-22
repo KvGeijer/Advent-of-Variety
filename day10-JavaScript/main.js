@@ -86,7 +86,6 @@ function getHashes(knots, size) {
 function part2(lengths) {
 
     lengths = lengths.concat([17, 31, 73, 47, 23]);
-    console.log(lengths);
 
     const nbrKnots = 256,
           rounds = 64;
