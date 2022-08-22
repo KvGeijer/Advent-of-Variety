@@ -11,30 +11,29 @@ function main() {
 
     // This way we can read multiple lines if we want
     // However, there must be a cleaner way to do this... Want to return and wait for futures
-    let lengths;
+    let input;
     parser.on('line', function(line){
-        lengths = line .split(',')
-                    .map(Number);
-                    parser.close();
+        input = line;
+        parser.close();
     })
 
     parser.on('close', function() {
-        pinchAndTwists(lengths, 256);
+
+        part1(input.split(',').map(Number));
+        part2(getCharCodes(input));
     })
 }
 
-function pinchAndTwists(lengths, nbrKnots) {
-    let knots = Array.from(Array(nbrKnots).keys()),
-        pos = 0,
-        skip = 0;
+function pinchAndTwists(lengths, knots, pos, skip) {
 
     lengths.forEach((length) => {
         twist(pos, length, knots);
 
-        pos = (pos + skip++ + length) % nbrKnots;
+        pos = (pos + skip++ + length) % knots.length;
     })
 
-    console.log(knots[0] * knots[1]);
+    return [pos, skip];
+
 }
 
 function twist(pos, length, knots) {
@@ -48,5 +47,70 @@ function twist(pos, length, knots) {
     }
 }
 
+function getCharCodes(s){
+    // Just taken from online... There must be a function to just get the ascii value of a char???
+    let charCodeArr = [];
+
+    for(let i = 0; i < s.length; i++){
+        let code = s.charCodeAt(i);
+        charCodeArr.push(code);
+    }
+
+    return charCodeArr;
+}
+
+
+function part1(lengths) {
+    const nbrKnots = 256;
+    let knots = Array.from(Array(nbrKnots).keys());
+
+    pinchAndTwists(lengths, knots, 0, 0);
+    console.log(`Simple hash ${knots[0] * knots[1]}`);
+}
+
+function getHashes(knots, size) {
+    let hashes = [];
+
+    // Would be interesting to do this concurrently
+    for (let i = 0; i < knots.length; i += size) {
+        let xor = knots[i];
+        for (let j = 1; j < size; j++) {
+            xor = xor ^ knots[i+j];
+        }
+        hashes.push(xor);
+    }
+
+    return hashes;
+}
+
+function part2(lengths) {
+
+    lengths = lengths.concat([17, 31, 73, 47, 23]);
+    console.log(lengths);
+
+    const nbrKnots = 256,
+          rounds = 64;
+    let knots = Array.from(Array(nbrKnots).keys());
+
+    let pos = 0,
+        skip = 0;
+
+    for (let i = 0; i < rounds; i++) {
+        [pos, skip] = pinchAndTwists(lengths, knots, pos, skip);
+    }
+
+    const denseHash = getHashes(knots, 16);
+
+    const knotHash = denseHash.map(x => {
+            const num = x.toString(16);
+            if (num.length == 1) {
+                return "0".concat(num);
+            } else {
+                return num;
+            }})
+            .join('');
+
+    console.log(`Knot hash ${knotHash}`);
+}
 
 main();
