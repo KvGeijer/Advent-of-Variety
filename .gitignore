@@ -6,3 +6,6 @@
 
 /day01*/npiet_windows
 
+*.dump
+*.beam
+
