@@ -1,6 +1,6 @@
 class Program
 
-    def initialize()
+    def initialize
         @pipes = Array.new
 
         @visited = false
@@ -10,7 +10,11 @@ class Program
         @pipes.append(program)
     end
 
-    def follow_pipes()
+    def reset_visited
+        @visited = false
+    end
+
+    def follow_pipes
         if  !@visited
             @visited = true
 
@@ -26,7 +30,7 @@ class Program
 end
 
 class Village
-    def initialize()
+    def initialize
         @programs = Array.new
 
         STDIN.each_line do |line|
@@ -47,16 +51,27 @@ class Village
     end
 
     def populate_program(nbr)
-        (nbr + 1 - @programs.length).times{ 
-            @programs.push Program.new
-        }
+        (nbr + 1 - @programs.length).times{ @programs.push Program.new }
     end
 
     def nbr_linked(ind) 
+        reset_visited
         linked = @programs.at(ind).follow_pipes()
         puts "Number linked to #{ind} is #{linked}"
+    end
+
+    def reset_visited
+        @programs.each {|program| program.reset_visited }
+    end
+
+    def count_groups
+        reset_visited
+        groups = @programs.filter{|prog| prog.follow_pipes != 0}.length
+        puts "Number separate groups: #{groups}"
+
     end
 end
 
 village = Village.new
 village.nbr_linked(0)
+village.count_groups
