@@ -64,7 +64,7 @@ A thing to note is that day 1 is a friday and that weekends tend to be the harde
 8. Register operations - Perl
 9. Stream parsing - Haskell (Parsec)
 10. Circular list manipulation for hashing - JavaScript
-11. Hex grid distances - ~~APL?~~
+11. Hex grid distances - ~~APL?~~ R
 12. Communication graph - Ruby
 13. Simulating moving scanners - Fortran?
-14. Grid hashings - Erlang?
+14. Grid hashings - Erlang
