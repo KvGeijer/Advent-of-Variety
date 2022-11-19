@@ -1,3 +1,4 @@
+; Could be much nicer
 (defclass scanner () 
   ((range
     :initarg :range
@@ -9,6 +10,7 @@
 (defun main () 
   (let* ((scanners (parse)))
     (part1 scanners) 
+    (part2 scanners)
   )
 )
 
@@ -16,6 +18,28 @@
   (let ((severity (delay-severity scanners 0)))
     (format t "Cost of going immediately: ~A~%" severity)
   ) 
+)
+
+; Got really annoyed that they removed severyty and now only cared
+; about getting caught (range 0 now important). Thefore I had to
+; trick my other things by increasing all scanners ranges by 1. We 
+; know 0 delay won't work, so we can increase range and still start
+; at 0 (which is the same as starting on one).
+(defun part2 (scanners)
+  (let* ((further-scanners (mapcar 
+           #'(lambda (scanner) 
+             (make-instance 'scanner 
+               :range (+ 1 (range scanner)) 
+               :depth (depth scanner)))
+           scanners))
+         (delay 0)
+         (severity 1)); Dummy value to enter for loop
+    (loop while (> severity 0) do
+      (setq severity (delay-severity further-scanners delay))
+      (setq delay (+ 1 delay))
+    )
+    (format t "First perfect delay: ~A~%" delay)
+  )
 )
  
 (defun delay-severity (scanners delay)
@@ -56,8 +80,5 @@
          (depth (parse-integer line :start (+ 2 split-pos) :end (length line))))
   (make-instance 'scanner :range range :depth depth))
 )
-
-;(setq f1 (make-instance 'scanner :range 1 :depth 2))
-;(setq f3 (make-instance 'scanner :range 6 :depth 4))
 
 (main)

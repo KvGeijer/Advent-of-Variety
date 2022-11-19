@@ -38,6 +38,7 @@ Here I try to solve all programming puzzles from the 2017 advent of code. The bi
 - Piet
 
 ### Multi paradigm
+- Common Lisp
 - Nim
 - Go
 - TypeScript
@@ -66,5 +67,6 @@ A thing to note is that day 1 is a friday and that weekends tend to be the harde
 10. Circular list manipulation for hashing - JavaScript
 11. Hex grid distances - ~~APL?~~ R
 12. Communication graph - Ruby
-13. Simulating moving scanners - Fortran?
+13. Simulating moving scanners - ~~Fortran?~~ Common Lisp
 14. Grid hashings - Erlang
+15. Comapring generators - Fortran
