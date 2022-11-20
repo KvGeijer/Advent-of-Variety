@@ -70,3 +70,8 @@ A thing to note is that day 1 is a friday and that weekends tend to be the harde
 13. Simulating moving scanners - ~~Fortran?~~ Common Lisp
 14. Grid hashings - Erlang
 15. Comapring generators - Fortran
+16. Permutation dance - TypeScript
+17. Spinning buffer insertions - OCaml
+18. Duet parsing - Nim
+19. Circuit following - Elixir
+20. Prticle simulation - Julia
