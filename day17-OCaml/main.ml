@@ -36,8 +36,25 @@ let rec do_spin_lock list next max spin_steps =
   
 let part1 spin_steps =
   let list = do_spin_lock [0] 1 2017 spin_steps in
-  print_int (List.nth list 1)
+  print_int (List.nth list 1);
+  print_newline ()
   
+let rec do_fake_spin_lock next after_zero pos len max spin_steps =
+  (* Just keep track of what's after 0 and when that is updated *) 
+  if next > max then after_zero else
+  let next_pos = (pos + spin_steps) mod len in
+  if next_pos == 0 then
+    do_fake_spin_lock (next + 1) next 1 (len + 1) max spin_steps
+  else
+    do_fake_spin_lock (next + 1) after_zero (next_pos + 1) (len + 1) max spin_steps
+ 
+
+let part2 spin_steps =
+  (* Can't do like part 1 due to efficiency, so sort of cheat *)
+  let after_zero = do_fake_spin_lock 2 1 1 2 50000000 spin_steps in
+  print_int after_zero
+
 let () =
   let spin_steps = read_int () in
   part1 spin_steps;
+  part2 spin_steps;

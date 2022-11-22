@@ -1,6 +1,6 @@
 ## Day 17 - OCaml
 
-The da
+The day was deceptively simple. The first part was really just permuting a cicrular linked list and inserting increasing elements. The second one upped the computational load, so the naïve solution could no longer be used. But it slightly changed the sought value which enabled me to use a very nice tail-recursive solution which just kept track of one number basically.
 
 ## Impressions of OCaml
 
