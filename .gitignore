@@ -2,7 +2,7 @@
 *.9d
 /*/local/*
 /*/main
-
+*/a.out
 
 /day01*/npiet_windows
 
