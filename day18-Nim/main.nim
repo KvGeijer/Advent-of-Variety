@@ -1,4 +1,4 @@
-import std/[strutils, sequtils, parseutils]
+import threadpool, std/[strutils, sequtils, parseutils, locks]
 
 type
     OpKind = enum
@@ -19,14 +19,24 @@ type
         jgz
     Instruction* = ref object
         case kind: InstrKind
-        of snd, rcv: 
+        of snd: 
             op: Operand
+        of rcv:
+            reg: char
         of jgz: 
             cond, jump: Operand
         of set, add, mul, modu: 
             left: char
             right: Operand
 
+var
+    # Had to do last minute changes, so now I just use horrible global variables
+    # Also use channels instead of variables due to bad documentation and frustration
+    mailboxOne, mailboxTwo, sleepbox: Channel[int]
+    globalLock: Lock
+    globalCond: Cond
+    
+    
 proc createOp(word: string): Operand =
     if word[0].isAlphaAscii:
         result = Operand(kind: reg,
@@ -40,7 +50,7 @@ proc createOp(word: string): Operand =
 proc parseInstruction(words: seq[string]): Instruction =
     case words[0]:
         of "snd": result = Instruction(kind: snd, op: create_op(words[1]))
-        of "rcv": result = Instruction(kind: rcv, op: create_op(words[1]))
+        of "rcv": result = Instruction(kind: rcv, reg: words[1][0])
         of "set": result = Instruction(kind: set, left: words[1][0], right: create_op(words[2]))
         of "add": result = Instruction(kind: add, left: words[1][0], right: create_op(words[2]))
         of "mul": result = Instruction(kind: mul, left: words[1][0], right: create_op(words[2]))
@@ -67,23 +77,63 @@ proc eval(op: Operand, registers: var seq[int]): int =
     of reg:
         result = registers[op.reg.index]
           
-proc exec(instr: Instruction, registers: var seq[int], lastSound: var int): int = 
-    echo "eval ", lastSound, " ", instr.kind
+proc send(val: int, duetNumber: int, registers: var seq[int]) =
+    globalLock.acquire()
+    if duetNumber == 1:
+        mailboxTwo.send(val)
+    elif duetNumber == 2:
+        mailboxOne.send(val)
+    globalCond.broadcast()
+    globalLock.release()
+    
+proc receive(reg: char, duetNumber: int, registers: var seq[int]): bool =
+    result = true
+
+    globalLock.acquire()
+    while true:
+        if duetNumber == 1:
+            let tried = mailboxOne.tryRecv()
+            if tried.dataAvailable:
+                registers[reg.index] = tried.msg
+                break      
+        elif duetNumber == 2:
+            let tried = mailboxTwo.tryRecv()
+            if tried.dataAvailable:
+                registers[reg.index] = tried.msg
+                break      
+        
+        if sleepbox.peek() > 0 and mailboxOne.peek() == mailboxTwo.peek():
+            # Deadlock! So exit and break
+            sleepbox.send(1)
+            globalCond.broadcast()
+            result = false
+            break
+        else:
+            # Must wait for a message
+            sleepbox.send(1)
+            globalCond.wait(globalLock)
+            discard sleepbox.recv()
+            
+    globalLock.release()
+
+# Should indent to shorten line... Became quite a clusterfuck when mixing part 1 and 2...
+proc exec(instr: Instruction, duetNumber: int, registers: var seq[int], lastSound: var int, nbrSent: var int): int = 
     result = 1
     case instr.kind:
     of snd:
-        echo "Playing sound!"
-        echo instr.op.eval(registers)
-        lastSound = instr.op.eval(registers)        
+        if duetNumber == 0:
+            lastSound = instr.op.eval(registers)        
+        else:
+            instr.op.eval(registers).send(duetNumber, registers)
+            nbrSent += 1
     of rcv:
-        # Can we use a guard for this instead?
-        if (instr.op.eval(registers) != 0):
-            echo "Recovering sound!"
-            echo lastSound
-            echo registers
-            quit(0)
+        if duetNumber == 0:
+            if registers[instr.reg.index] != 0:
+                echo "Recovering sound: ", lastSound
+                result = 100000    # Ugly way to jump outside the main loop so we can continue with part 2
+        elif not receive(instr.reg, duetNumber, registers):
+            result = 100000
     of set:
-        #echo instr.left, " ", instr.left.index, " ", instr.right.eval(registers)
         registers[instr.left.index] = instr.right.eval(registers)
     of add:
         registers[instr.left.index] += instr.right.eval(registers)
@@ -95,22 +145,40 @@ proc exec(instr: Instruction, registers: var seq[int], lastSound: var int): int 
         if (instr.cond.eval(registers) > 0):
             result = instr.jump.eval(registers)
                                                                   
-proc simulate(instructions: seq[Instruction]) =
+proc simulate(instructions: seq[Instruction], duetNumber: int) =
     var 
-        pos: int
-        lastSound: int = -1337
+        pos, nbrSent, lastSound: int
         registers: seq[int] = newSeq[int](25)
-    
-    while pos >= 0 and pos < instructions.len:
-        echo "simul ind ", pos
-        pos += exec(instructions[pos], registers, lastSound)
 
+    # For part 2, use duetNumber 1 and 2
+    if duetNumber != 0:
+        registers['p'.index] = duetNumber - 1
+
+    while pos >= 0 and pos < instructions.len:
+        pos += exec(instructions[pos], duetNumber, registers, lastSound, nbrSent)
+    
+    if duetNumber == 2:
+        echo "Messages sent by process 1: ", nbrSent
+        
+        
 proc part1(instructions: seq[Instruction]) =
-    simulate(instructions)
-              
+    simulate(instructions, 0)
+
+proc part2(instructions: seq[Instruction]) =
+    initLock(globalLock)
+    initCond(globalCond)
+    
+    mailboxOne.open()
+    mailboxTwo.open()
+    sleepbox.open()
+        
+    spawn simulate(instructions, 1)
+    spawn simulate(instructions, 2)    
+    sync()
+
 proc main() =
     let instructions = parse()
     part1(instructions)
-    #part2(instructions)
-    
+    part2(instructions)
+
 main()

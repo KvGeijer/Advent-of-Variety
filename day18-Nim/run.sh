@@ -1,3 +1,3 @@
 #! /usr/bin/sh
 
-nim compile --run main.nim < input.in
+nim compile --threads:on --run main.nim < input.in
