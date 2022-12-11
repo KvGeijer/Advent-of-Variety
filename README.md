@@ -1,6 +1,6 @@
 # Advent of Change
 
-Here I try to solve all programming puzzles from the 2017 advent of code. The big catch is that I will use a different language each day. I should also try to seek out new languages and not use too many I already use a lot.
+Here I try to solve all programming puzzles from the 2017 advent of code. The big catch is that I will use a different language each day. I should also try to seek out new languages and not use ones I already feel I know.
 
 
 ## Ideas for languages:
