@@ -10,6 +10,7 @@ Here I try to solve all programming puzzles from the 2017 advent of code. The bi
 - Pascal (Free Pascal)
 - Bash
 - x86 Assembly
+- Zig
 
 ### Object Oriented
 - ~~Simula~~
@@ -74,4 +75,4 @@ A thing to note is that day 1 is a friday and that weekends tend to be the harde
 17. Spinning buffer insertions - OCaml
 18. Duet parsing - Nim
 19. Circuit following - Elixir
-20. Prticle simulation - Julia
+20. Particle simulation - Julia
