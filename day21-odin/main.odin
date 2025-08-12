@@ -6,26 +6,6 @@ import "core:strings"
 import "base:runtime"
 import "base:intrinsics"
 
-
-print3 :: proc(bits: u16) {
-    fmt.printf("---\n")
-    fmt.printf("%03b\n%03b\n%03b\n", bits>>6, (bits>>3)&0b111, bits&0b111)
-    fmt.printf("---\n")
-}
-
-print6 :: proc(bits: u64) {
-    fmt.printf("%b\n", bits)
-    fmt.printf("-~-\n")
-    fmt.printf("%06b\n%06b\n%06b\n%06b\n%06b\n%06b\n", bits>>30, bits>>24&0b111111, bits>18&0b111111, bits>>12&0b111111, (bits>>6)&0b111111, bits&0b111111)
-    fmt.printf("-~-\n")
-}
-
-print2 :: proc(bits: u8) {
-    fmt.printf("---\n")
-    fmt.printf("%02b\n%02b\n", bits>>2, bits&0b11)
-    fmt.printf("---\n")
-}
-
 rotate2 :: proc(p: u8) -> u8 {
     return (p&0b0001)<<1 + (p&0b0010)<<2 + (p&0b0100)>>2 + (p&0b1000)>>1
 }
@@ -138,9 +118,6 @@ simulate4 :: proc(bits: [4]u8, iters: int, rules2: map[u8]u16, rules3: map[u16][
         sixsix |= (three&0b111) << offset
     }
 
-
-    
-
     // Transmute the 6x6 into 9 2x2
     many_twos: [9]u8
     for row :u8= 0; row < 3; row += 1 {
@@ -166,7 +143,6 @@ simulate4 :: proc(bits: [4]u8, iters: int, rules2: map[u8]u16, rules3: map[u16][
 
 main :: proc() {
     rules2, rules3 := parse_input()
-
     start := parse_pattern(".#./..#/###")
 
     count1 := simulate3(start, 5, rules2, rules3)
