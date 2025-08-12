@@ -170,8 +170,9 @@ main :: proc() {
     start := parse_pattern(".#./..#/###")
 
     count1 := simulate3(start, 5, rules2, rules3)
-
-   
     fmt.printf("%d\n", count1)
+    
+    count2 := simulate3(start, 18, rules2, rules3)
+    fmt.printf("%d\n", count2)
 }
 
