@@ -6,6 +6,7 @@ const Pos = struct {
 };
 
 const Dir = enum { up, right, down, left };
+const NodeState = enum { weakened, infected, flagged };
 
 const Carrier = struct {
     pos: Pos,
@@ -39,13 +40,26 @@ const Carrier = struct {
     }
 };
 
-pub fn step(carrier: *Carrier, map: *std.AutoHashMap(Pos, void), infections: *usize) !void {
-    if (!map.remove(carrier.pos)) {
-        carrier.rotate_left();
-        try map.put(carrier.pos, {});
-        infections.* += 1;
+pub fn step(carrier: *Carrier, map: *std.AutoHashMap(Pos, NodeState), infections: *usize) !void {
+    if (map.getPtr(carrier.pos)) |state| {
+        switch (state.*) {
+            .weakened => {
+                state.* = .infected;
+                infections.* += 1;
+            },
+            .infected => {
+                carrier.rotate_right();
+                state.* = .flagged;
+            },
+            .flagged => {
+                carrier.rotate_right();
+                carrier.rotate_right();
+                _ = map.remove(carrier.pos);
+            },
+        }
     } else {
-        carrier.rotate_right();
+        try map.put(carrier.pos, .weakened);
+        carrier.rotate_left();
     }
 
     carrier.step();
@@ -54,7 +68,7 @@ pub fn step(carrier: *Carrier, map: *std.AutoHashMap(Pos, void), infections: *us
 pub fn main() !void {
     const gpa = std.heap.page_allocator;
 
-    var map = std.AutoHashMap(Pos, void).init(gpa);
+    var map = std.AutoHashMap(Pos, NodeState).init(gpa);
     defer map.deinit();
 
     var stdin = std.io.getStdIn().reader();
@@ -67,7 +81,7 @@ pub fn main() !void {
         if (maybe_slice) |slice| {
             for (slice, 0..) |char, col| {
                 if (char == '#') {
-                    try map.put(.{ .row = row, .col = @intCast(col) }, {});
+                    try map.put(.{ .row = row, .col = @intCast(col) }, NodeState.infected);
                 }
             }
         } else break;
@@ -77,8 +91,7 @@ pub fn main() !void {
     var carrier: Carrier = .{ .pos = .{ .row = @divTrunc(row, 2), .col = @divTrunc(row, 2) }, .dir = Dir.up };
 
     var infections: usize = 0;
-
-    for (0..10000) |_| {
+    for (0..10000000) |_| {
         try step(&carrier, &map, &infections);
     }
 
