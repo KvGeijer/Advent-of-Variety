@@ -1,83 +1,19 @@
-# Advent of Change
+# Advent of Variety
 
-Here I try to solve all programming puzzles from the 2017 advent of code. The big catch is that I will use a different language each day. I should also try to seek out new languages and not use ones I already feel I know.
+In this repository, I've solved all of Advent of Code 2017 using a different programming language each day. I tried to pick interesting languages that I had never used before (I broke this a bit with Haskell, but there I mainly used a specefic new library, as well as Excel, Bash, Assembly). I've always enjoyed programming language designs, so the idea of trying all these languages was to experience how it feels writing in them, and if there are some interesting new design ideas.
 
+I've written a short markdown note about each day and language in their sub-folders, for anyone who is interested in my first impressions.
 
-## Ideas for languages:
+## Standout Languages
 
-### Imperative
-- FORTRAN
-- Pascal (Free Pascal)
-- Bash
-- x86 Assembly
-- Zig
+- **Piet** was a great start to this experiment. In it, you paint a pixlemap in different colors, and then the program is executed by a cursor navigating the canvas following some rules, executing stack-based instructions based on changes in color and hue at color boundaries. It is horrible to write things in, but a fun experience, and almost like a puzzle game.
 
-### Object Oriented
-- ~~Simula~~
-- ~~SmallTalk~~
-- C++
-- Ruby
-- Kotlin
-- C#
+- **Fortran** was surprisingly easy to use, and almost felt a bit modern. I would have expected it to feel like a cross of C and assembly, but it almost felt more high-level than C in some ways, generally being nice to work with.
 
-### Logic
-- Prolog
+- **Scala** just felt plain good to use. Running on the JVM, I would vastly prefer this over Java, and could absolutely see myself enjoying using it, both for large and small projects.
 
-### Functional
-- OCaml
-- Erlang
-- Elixir
-- PureScript
-- Scala
-- Haskell (Parsec)
+- **Prolog** was horrible. Almost made me give up on the whole thing. Probably nice to write when you understand it, but then you have to learn it the right way, and not just in this scuffed way I tried to. I also had a hard time finding good resources on it online, for example on how to parse input data. In the end, I only came back to it after the rise of ChatGPT, which simplified the learning process for me.
 
-### Array based
-- Excel
-- ~~APL~~
+- **Odin** and **Zig** were both very nice alternatives to C, and I hope to use something like them in the future.
 
-### Meme
-- Piet
-
-### Multi paradigm
-- Common Lisp
-- Nim
-- Go
-- TypeScript
-- Julia		(multiple dispatch?)
-- Lua 		(scripting mainly)
-- Perl
-- Raku 		(Perl)
-- R		(Statistical)
-- JavaScript	(Maybe too alike?)
-- Pen and paper
-
-
-## Problem to language map
-
-A thing to note is that day 1 is a friday and that weekends tend to be the hardest.
-
-1. Circular lists - Piet
-2. Row checksums - Excel
-3. Spiral distances - Pascal
-4. Valid passphrases - Bash
-5. Jump offsets - x86
-6. Memory reallocation - ~~Simula~~ ~~SmallTalk~~ Kotlin
-7. Balancing towers - Prolog
-8. Register operations - Perl
-9. Stream parsing - Haskell (Parsec)
-10. Circular list manipulation for hashing - JavaScript
-11. Hex grid distances - ~~APL?~~ R
-12. Communication graph - Ruby
-13. Simulating moving scanners - ~~Fortran?~~ Common Lisp
-14. Grid hashings - Erlang
-15. Comapring generators - Fortran
-16. Permutation dance - TypeScript
-17. Spinning buffer insertions - OCaml
-18. Duet parsing - Nim
-19. Circuit following - Elixir
-20. Particle simulation - Roc
-21. Fractal art - Odin
-22. Virus grid traversal - Zig
-23. Virtual machine 2 - F#
-24. Elecrtomagnetic DP - Scala
-25. Halting Turing machine - Gleam
+- **OCaml** was a nice impure functional language which I could absolutely see myself working with in the future.
