@@ -80,4 +80,4 @@ A thing to note is that day 1 is a friday and that weekends tend to be the harde
 22. Virus grid traversal - Zig
 23. Virtual machine 2 - F#
 24. Elecrtomagnetic DP - Scala
-25. Halting Turing machine - C#
+25. Halting Turing machine - Gleam
